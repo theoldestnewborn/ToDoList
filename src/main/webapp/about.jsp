@@ -56,7 +56,7 @@
         <div style="background: rgba(10,6,6,0.33); color: rgba(255,255,255,0.63)" class="p-5 rounded-2 border" >
             <p> <a href="/start">ToDoList</a> was created by Aleksei Chirkun in August, 2022.</p>
             - Java SE </br>
-            - Jave EE </br>
+            - Java EE </br>
             - JDBC, PostgreSQL </br>
             - Maven </br>
             - HTML, CSS, Bootstrap</p>
