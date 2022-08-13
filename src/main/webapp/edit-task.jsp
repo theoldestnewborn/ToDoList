@@ -13,14 +13,36 @@
 
 <body class="body container-fluid">
 <header>
+    <header class="pt-5">
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+                <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
+                    <span class="fs-1">ToDoList Project</span>
+                </div>
 
+                <ul class="nav nav-pills justify-content-between">
+                    <div class="align-items-end d-flex mx-2">
+                        <form action="/about.jsp">
+                            <button type="submit" class="btn btn-light btn-outline-dark">About</button>
+                        </form>
+                    </div>
+                    <div class="align-items-end d-flex mx-2 ">
+                        <form action="/logout" method="get">
+                            <button type="submit" class="btn btn-light btn-outline-dark">LogOut</button>
+                        </form>
+                    </div>
+                    </li>
+                </ul>
+            </header>
+        </div>
+    </header>
 </header>
-<main class="container pt-5">
+<main class="container">
     <div class="container pt-5">
         <div class="row p-lg-4 p-1 pb-3 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
             <div class="col-lg-12 p-1 p-lg-5 pt-lg-3">
                 <h1 class="display-4 fw-bold lh-1 text-light">ToDoList</h1>
-                <p class="lead text-light">Current list: '${listName}'</p>
+                <p class="lead text-light">Current list: '${list.listName}'</p>
 
                 <p class="lead text-light">Here you can edit your task</p>
 
@@ -34,10 +56,15 @@
                      aria-controls="collapse">
                     <div class="btn-group">
                         <button type="submit"
-                                value="${task.listName},${task.task_body}"
+                                value="${list.idList},${task.taskBody}"
                                 name="listAndTask"
                                 class="btn btn-outline-dark  col-lg-12 col-12">
-                            <c:out value="${task.task_body}"/>
+                            <c:forEach items="${allTasks}" var="task">
+                                <c:if test="${task.active==true}">
+                                    🔥
+                                </c:if>
+                            </c:forEach>
+                            <c:out value="${task.taskBody}"/>
 
                             <c:if test="${task.complete==true}">
                                 <div class="badge bg-success rounded-pill ">
@@ -65,7 +92,7 @@
                             mb-1 list-group list-group-item-dark
                             align-items-center">
                             <button type="submit"
-                                    value="${task.listName},${task.task_body}"
+                                    value="${list.idList},${task.taskBody}"
                                     name="listAndTask"
                                     form="editTask"
                                     class="btn btn-outline-dark"> Update
@@ -89,7 +116,7 @@
                             <form action="/viewAllTasks" method="post" id="edit_body"></form>
 
                             <button type="submit" form="delete" name="listAndTask"
-                                    value="${task.listName},${task.task_body}"
+                                    value="${list.idList},${task.taskBody}"
                                     class="btn btn-outline-dark col-lg-1 col-3">Delete
                             </button>
                             <form action="/deleteTask" method="post" id="delete"></form>
@@ -98,7 +125,7 @@
 
                             <c:if test="${task.active==false}">
                                 <button type="submit" form="set_active" name="listAndTask"
-                                        value="${task.listName},${task.task_body},true"
+                                        value="${list.idList},${task.taskBody},true"
                                         class="btn btn-outline-dark col-lg-1 col-3">Set Active 🔥
                                 </button>
                                 <form action="/setTaskActive" method="post" id="set_active"></form>
@@ -107,7 +134,7 @@
                             </c:if>
                             <c:if test="${task.active==true}">
                                 <button type="submit" form="set_active" name="listAndTask"
-                                        value="${task.listName},${task.task_body},false"
+                                        value="${list.idList},${task.taskBody},false"
                                         class="btn btn-outline-dark col-lg-1 col-3">Set Inactive 🧯
                                 </button>
                                 <form action="/setTaskActive" method="post" id="set_active"></form>
@@ -116,15 +143,9 @@
                             </c:if>
 
 
-
-
-
-
-
-
                             <c:if test="${task.complete==false}">
                                 <button type="submit" form="set_complete" name="listAndTask"
-                                        value="${task.listName},${task.task_body},true"
+                                        value="${list.idList},${task.taskBody},true"
                                         class="btn btn-outline-dark col-lg-1 col-3">Set Complete
                                     <div class="badge bg-success rounded-pill ">
                                         ✓
@@ -135,7 +156,7 @@
                             </c:if>
                             <c:if test="${task.complete==true}">
                                 <button type="submit" form="set_complete" name="listAndTask"
-                                        value="${task.listName},${task.task_body},false"
+                                        value="${list.idList},${task.taskBody},false"
                                         class="btn btn-outline-dark col-lg-1 col-3">Set Incomplete
                                     <div class="badge bg-warning rounded-pill ">
                                         ❌
@@ -154,24 +175,29 @@
                              list-group list-group-item-dark
                             align-items-center">
                         <button type="submit" form="back"
-                                name="listName"
-                                value="${task.listName}"
+                                name="idList"
+                                value="${list.idList}"
                                 class="btn btn btn-outline-dark col-lg-12 col-12">Back
                         </button>
                         <form action="/viewAllTasks" method="get" id="back"></form>
                     </div>
                 </div>
-
-                <div class="col-10 justify-content-between d-flex align-items-center">
-                    <c:forEach items="${allTasks}" var="task">
-                        <c:if test="${task.active==true}">
-                            <div class="lead text-light bg-warning p-2" style="word-break: break-all">
-                                <c:out value="Active task: '${task.task_body}' of '${listName}' list"/>
+                <c:if test="${update==true}">
+                    <c:if test="${hasProperName==true}">
+                        <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                            <div class="alert alert-success" role="alert">
+                                Task was successfully updated.
                             </div>
-                        </c:if>
-                    </c:forEach>
-                </div>
-
+                        </div>
+                    </c:if>
+                    <c:if test="${hasProperName==false}">
+                        <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                            <div class="alert alert-warning" role="alert">
+                                Task '${taskWithWrongName.taskBody}' already exists or has wrong name.
+                            </div>
+                        </div>
+                    </c:if>
+                </c:if>
             </div>
         </div>
     </div>

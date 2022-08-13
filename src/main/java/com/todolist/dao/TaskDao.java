@@ -17,36 +17,16 @@ public class TaskDao {
         }
     }
 
-    public List<Task> getAllTasks() {
-        List<Task> allTasks = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection
-                (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from tasks;");
-            while (rs.next()) {
-                Task task = new Task();
-                task.setTask(rs.getString("task_body"));
-                task.setActive(rs.getBoolean("active"));
-                task.setComplete(rs.getBoolean("status"));
-                task.setListName(rs.getString("fk_list_name"));
-                allTasks.add(task);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return allTasks;
-    }
-
-    public List<Task> getAllTasksOfList(String listName) {
+    public List<Task> getAllTasksOfList(Lists list) {
         List<Task> allTasks = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from tasks " +
-                    "where fk_list_name = ('" + listName + "');");
+                    "where fk_id_list = ('" + list.getIdList() + "');");
             while (rs.next()) {
                 Task task = new Task();
-                task.setTask(rs.getString("task_body"));
+                task.setTaskBody(rs.getString("task_body"));
                 task.setActive(rs.getBoolean("active"));
                 task.setComplete(rs.getBoolean("status"));
                 allTasks.add(task);
@@ -57,38 +37,41 @@ public class TaskDao {
         return allTasks;
     }
 
-    public boolean ifTaskExists(Task task) {
-        String listName = task.getListName();
-        String task_body = task.getTask_body();
-        boolean ifTaskExists = false;
+    public boolean taskExists(Lists list, Task task) {
+        int idList = list.getIdList();
+        String taskBody = task.getTaskBody();
+        boolean taskExists = false;
         try (Connection connection = DriverManager.getConnection
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from tasks " +
-                    "where fk_list_name = '" + listName + "' " +
-                    "and task_body = '" + task_body + "';");
+                    "where fk_id_list = '" + idList + "' " +
+                    "and task_body = '" + taskBody + "';");
             if (rs.next()) {
-                ifTaskExists = true;
+                taskExists = true;
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return ifTaskExists;
+        return taskExists;
     }
 
-    public Task getOneTask(String listName, String task_body) {
+    public Task getTaskByBody(Lists list, Task taskByBody) {
         Task task = null;
+        int idList = list.getIdList();
+        String taskBody = taskByBody.getTaskBody();
         try (Connection connection = DriverManager.getConnection
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from tasks " +
-                    "where fk_list_name = '" + listName + "' " +
-                    "and task_body = '" + task_body + "';");
+                    "where fk_id_list = '" + idList + "' " +
+                    "and task_body = '" + taskBody + "';");
             while (rs.next()) {
                 task = new Task();
-                task.setListName(rs.getString("fk_list_name"));
-                task.setTask(rs.getString("task_body"));
+                task.setId(rs.getInt("id_task"));
+                task.setIdList(rs.getInt("fk_id_list"));
+                task.setTaskBody(rs.getString("task_body"));
                 task.setActive(rs.getBoolean("active"));
                 task.setComplete(rs.getBoolean("status"));
             }
@@ -114,17 +97,17 @@ public class TaskDao {
         return hasActive;
     }
 
-    public void setActiveTask(Task task, boolean isActive) {
+    public void setTaskActive(Task task, boolean isActive) {
         try (Connection connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
-            String listName = task.getListName();
-            String task_body = task.getTask_body();
+            int idList = task.getIdList();
+            String taskBody = task.getTaskBody();
             if (isActive) {
                 stmt.executeUpdate("update tasks set active = false; " +
                         "update tasks set active = true " +
-                        "where fk_list_name = '" + listName + "' and task_body = '" + task_body + "'; " +
+                        "where fk_id_list = '" + idList + "' and task_body = '" + taskBody + "'; " +
                         "update tasks set status = false " +
-                        "where fk_list_name = '" + listName + "' and task_body = '" + task_body + "';");
+                        "where fk_id_list = '" + idList + "' and task_body = '" + taskBody + "';");
             } else {
                 stmt.executeUpdate("update tasks set active = false; ");
             }
@@ -133,34 +116,14 @@ public class TaskDao {
         }
     }
 
-    public Task getActiveTask() {
-        Task task = null;
-        try (Connection connection = DriverManager.getConnection
-                (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from tasks " +
-                    "where active = true");
-            while (rs.next()) {
-                task = new Task();
-                task.setListName(rs.getString("fk_list_name"));
-                task.setTask(rs.getString("task_body"));
-                task.setActive(rs.getBoolean("active"));
-                task.setComplete(rs.getBoolean("status"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return task;
-    }
-
     public void editTask(Task oldTask, Task newTask) {
         try (Connection connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
-            String listName = oldTask.getListName();
-            String task_body_new = newTask.getTask_body();
-            String task_body_old = oldTask.getTask_body();
-            stmt.executeUpdate("update tasks set task_body = '" + task_body_new + "', status = false, active = false " +
-                    "where fk_list_name = '" + listName + "' and task_body = '" + task_body_old + "';");
+            int idList = oldTask.getIdList();
+            String taskBodyNew = newTask.getTaskBody();
+            String taskBodyOld = oldTask.getTaskBody();
+            stmt.executeUpdate("update tasks set task_body = '" + taskBodyNew + "', status = false, active = false " +
+                    "where fk_id_list = '" + idList + "' and task_body = '" + taskBodyOld + "';");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -169,42 +132,42 @@ public class TaskDao {
     public void setTaskComplete(Task task, boolean isComplete) {
         try (Connection connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
-            String listName = task.getListName();
-            String task_body = task.getTask_body();
+            int idList = task.getIdList();
+            String taskBody = task.getTaskBody();
             if (isComplete == true) {
                 stmt.executeUpdate("update tasks set status = " + isComplete + " " +
-                        "where fk_list_name = '" + listName + "' and task_body = '" + task_body + "'; " +
+                        "where fk_id_list = '" + idList + "' and task_body = '" + taskBody + "'; " +
                         "update tasks set active = false " +
-                        "where fk_list_name = '" + listName + "' and task_body = '" + task_body + "';");
+                        "where fk_id_list = '" + idList + "' and task_body = '" + taskBody + "';");
             } else {
                 stmt.executeUpdate("update tasks set status = " + isComplete + " " +
-                        "where fk_list_name = '" + listName + "' and task_body = '" + task_body + "';");
+                        "where fk_id_list = '" + idList + "' and task_body = '" + taskBody + "';");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void addTask(Task task) {
+    public void addTask(Lists list, Task task) {
         try (Connection connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
-            String listName = task.getListName();
-            String task_body = task.getTask_body();
-            stmt.executeUpdate("insert into tasks (fk_list_name, task_body) " +
-                    "values ('" + listName + "','" + task_body.trim() + "' );");
+            String taskBody = task.getTaskBody().trim();
+            int idList = list.getIdList();
+            stmt.executeUpdate("insert into tasks (fk_id_list, task_body) " +
+                    "values ('" + idList + "','" + taskBody + "' );");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void deleteTask(Task task) {
-        String listName = task.getListName();
-        String task_body = task.getTask_body();
+        int idList = task.getIdList();
+        String taskBody = task.getTaskBody();
         try (Connection connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("delete from tasks " +
-                    "where fk_list_name = ('" + listName + "') " +
-                    "and task_body = ('" + task_body + "');");
+                    "where fk_id_list = ('" + idList + "') " +
+                    "and task_body = ('" + taskBody + "');");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

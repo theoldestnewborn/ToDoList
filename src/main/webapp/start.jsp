@@ -5,10 +5,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>ToDoLost</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>ToDoList</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link
@@ -28,31 +28,35 @@
     <link rel="stylesheet" href="custom.css">
 </head>
 <body class="body container-fluid">
-<header>
-
-</header>
-<main class="container pt-5">
-    <div class="d-flex justify-content-center">
-        <div class="container pt-5 mb-3">
-            <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-                <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-                    <h1 class="display-4 fw-bold lh-1 text-light">ToDoList</h1>
-                    <p class="lead text-light">Welcome to ToDoList by Aleksei Chirkun</p>
-
-                    <%--                <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">--%>
-                    <%--                    <form action= <c:url value="/viewAll"/> method="get">--%>
-                    <%--                    <button type="submit" class="btn btn-outline-light btn-lg px-4 me-md-2 fw-bold">Start</button>--%>
-                    <%--                    </form>--%>
-                    <%--                </div>--%>
-
-                </div>
+<header class="pt-5">
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
+                <span class="fs-1">ToDoList Project</span>
             </div>
-        </div>
+
+            <ul class="nav nav-pills justify-content-between">
+                <div class="align-items-end d-flex mx-2">
+                    <form action="/about.jsp">
+                        <button type="submit" class="btn btn-light btn-outline-dark">About</button>
+                    </form>
+                </div>
+                <div class="align-items-end d-flex mx-2 ">
+                    <form action="/start.jsp" method="get">
+                        <button type="submit" class="btn btn-light btn-outline-dark">Login</button>
+                    </form>
+                </div>
+                </li>
+            </ul>
+        </header>
     </div>
-    <div class="d-flex justify-content-center">
-        <div>
+</header>
+<main class="container">
+
+    <div class="d-flex justify-content-center p-3 ">
+        <div style="background: rgba(10,6,6,0.33)" class="p-5 rounded-2 border ">
             <!-- Pills navs -->
-            <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+            <ul class="nav nav-pills nav-justified mb-3 " role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
                        aria-controls="pills-login" aria-selected="true">Login</a>
@@ -62,17 +66,16 @@
                        aria-controls="pills-register" aria-selected="false">Register</a>
                 </li>
             </ul>
-            <!-- Pills navs -->
 
             <!-- Pills content -->
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-                    <form action="<c:url value = "/login"/>" method="post">
+                    <form action="<c:url value = "/login"/>" method="get">
 
-                        <!-- Email input -->
+                        <!-- Login input -->
                         <div class="form-outline mb-4">
-                            <input type="text" id="loginName" name="userName" class="form-control"/>
-                            <label class="form-label" for="loginName">Email or username</label>
+                            <input type="text" id="login" name="login" class="form-control"/>
+                            <label class="form-label" for="login">Login</label>
                         </div>
 
                         <!-- Password input -->
@@ -92,8 +95,8 @@
 
                             <!-- Username input -->
                             <div class="form-outline mb-4">
-                                <input type="text" id="registerUsername" name="userName" class="form-control"/>
-                                <label class="form-label" for="registerUsername">Username</label>
+                                <input type="text" id="registerLogin" name="login" class="form-control"/>
+                                <label class="form-label" for="registerLogin">Login</label>
                             </div>
 
                             <!-- Email input -->
@@ -121,7 +124,23 @@
                     </form>
                 </div>
             </div>
-            <strong style="color: ${color}">${message}</strong>
+
+            <c:if test="${register==true}">
+                <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                    <div class="alert alert-success" role="alert">
+                            ${message}
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${register==false}">
+                <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                    <div class="alert alert-warning" role="alert">
+                            ${message}
+                    </div>
+                </div>
+            </c:if>
+
+
         </div>
     </div>
 

@@ -11,15 +11,35 @@
 </head>
 
 <body class="body container-fluid">
-<header>
+<header class="pt-5">
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
+                <span class="fs-1">ToDoList Project</span>
+            </div>
 
+            <ul class="nav nav-pills justify-content-between">
+                <div class="align-items-end d-flex mx-2">
+                    <form action="/about.jsp">
+                        <button type="submit" class="btn btn-light btn-outline-dark">About</button>
+                    </form>
+                </div>
+                <div class="align-items-end d-flex mx-2 ">
+                    <form action="/logout" method="get">
+                        <button type="submit" class="btn btn-light btn-outline-dark">LogOut</button>
+                    </form>
+                </div>
+                </li>
+            </ul>
+        </header>
+    </div>
 </header>
-<main class="pt-5">
+<main class="container">
     <div class="container pt-5">
         <div class="row p-lg-4 p-1 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
             <div class="col-lg-12 p-2 p-lg-5 pt-lg-3 pb-lg-1">
                 <h1 class="display-4 fw-bold lh-1 text-light">ToDoList</h1>
-                <p class="lead text-light">Current list: '${listName}'</p>
+                <p class="lead text-light">Current list: '${list.listName}'</p>
 
                 <div class="list-group">
                     <c:if test="${allTasks.isEmpty()==true}">
@@ -41,12 +61,15 @@
                                                 align-items-center">
                                         <div class="btn-group">
                                             <button type="submit"
-                                                    value="${listName},${task.task_body}"
+                                                    value="${list.idList},${task.taskBody}"
                                                     name="listAndTask"
                                                     form="edit"
                                                     class="btn btn-outline-dark justify-content-between
                                                            d-flex col-lg-11 col-9">
-                                                <c:out value="${task.task_body}"/>
+                                                <c:out value="${task.taskBody}"/>
+                                                <c:if test="${task.active==true}">
+                                                    🔥
+                                                </c:if>
                                                 <div>
                                                     <c:if test="${task.complete==true}">
                                                         <div class="badge bg-success rounded-pill ">
@@ -64,8 +87,8 @@
 
                                             <div>
                                                 <button type="submit" name="listAndTask" form="delete"
-                                                        value="${listName},${task.task_body}"
-                                                        class="btn btn-outline-dark">Delete
+                                                        value="${list.idList},${task.taskBody}"
+                                                class="btn btn-outline-dark">Delete
                                                 </button>
                                             </div>
                                         </div>
@@ -82,31 +105,46 @@
 
             <div class="col-lg-12 p-2 p-lg-5 pt-lg-3 pb-lg-1">
                 <div class="input-group mb-3">
-                    <input type="text" form="addTask" class="form-control" name="task_body"
+                    <input type="text" form="addTask" class="form-control" name="taskBody"
                            placeholder="Task Body">
-                    <form action="/addTask" method="post" id="addTask">
+                    <form action="/viewAllTasks" method="post" id="addTask">
                         <button type="submit" class="btn btn-outline-secondary"
-                                value="${listName}" name="listName">Add task
+                                value="${list.idList}" name="idList">Add task
                         </button>
                     </form>
                     <form action="/viewAll" method="get">
-                        <button class="btn btn-outline-secondary" value="${listName}" type="submit">Back</button>
+                        <button class="btn btn-outline-secondary" value="${list.idList}" type="submit">Back</button>
                     </form>
                 </div>
-                <div class="col-10 justify-content-between d-flex align-items-center">
-                    <c:forEach items="${allTasks}" var="task">
-                        <c:if test="${task.active==true}">
-                            <div class="lead text-light bg-warning p-2" style="word-break: break-all">
-                                <c:out value="Active task: '${task.task_body}' of '${listName}' list"/>
+
+                <c:if test="${create==true}">
+                    <c:if test="${hasProperName==true}">
+                        <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                            <div class="alert alert-success" role="alert">
+                                Task '${task.taskBody}' was successfully created.
                             </div>
-                        </c:if>
-                    </c:forEach>
-                </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${hasProperName==false}">
+                        <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                            <div class="alert alert-warning" role="alert">
+                                Task '${task.taskBody}' already exists or has wrong name.
+                            </div>
+                        </div>
+                    </c:if>
+                </c:if>
+
+                <c:if test="${delete==true}">
+                    <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                        <div class="alert alert-warning" role="alert">
+                            Task '${task.taskBody}' was successfully deleted.
+                        </div>
+                    </div>
+                </c:if>
+
             </div>
         </div>
     </div>
-
-
 </main>
 
 <footer>

@@ -25,10 +25,16 @@ public class UserRegistrationServler extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = mapper.toUser((UserRegisterDto) request.getAttribute("user"));
-        userDao.registerUser(user);
-        request.setAttribute("color", "green");
-        request.setAttribute("message", "User is registered!");
-        request.getRequestDispatcher("viewAll").forward(request, response);
+        if (!userDao.findByLogin(user)) {
+            userDao.registerUser(user);
+            request.setAttribute("message", "User " + user.getLogin() +  " is registered!");
+            request.setAttribute("register", true);
+            request.getRequestDispatcher("/start.jsp").forward(request, response);
+        } else {
+            request.setAttribute("message", "Such user already exists");
+            request.setAttribute("register", false);
+            request.getRequestDispatcher("/start.jsp").forward(request, response);
+        }
     }
 
 

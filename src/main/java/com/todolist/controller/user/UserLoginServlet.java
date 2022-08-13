@@ -1,5 +1,6 @@
 package com.todolist.controller.user;
 
+import com.todolist.dao.ListDao;
 import com.todolist.dao.UserDao;
 import com.todolist.dto.UserLoginDto;
 import com.todolist.dto.mapper.UserMapper;
@@ -23,12 +24,15 @@ public class UserLoginServlet extends HttpServlet {
      }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = mapper.toUser((UserLoginDto) request.getAttribute("user"));
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User userToLogin = mapper.toUser((UserLoginDto) request.getAttribute("user"));
+        boolean isRegistered = userService.isRegistered(userToLogin);
         HttpSession session = request.getSession();
-        boolean isRegistered = userService.isRegistered(user);
         session.setAttribute("isAuth", isRegistered);
-        request.getRequestDispatcher("viewAll").forward(request,response);
+        User user = new UserDao().getUserByLogin(userToLogin);
+        session.setAttribute("user", user);
+        request.setAttribute("allLists", new ListDao().getAllLists(user));
+        request.getRequestDispatcher("/viewAll").forward(request,response);
     }
 
     @Override

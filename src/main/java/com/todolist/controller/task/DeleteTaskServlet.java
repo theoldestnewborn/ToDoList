@@ -1,6 +1,8 @@
 package com.todolist.controller.task;
 
+import com.todolist.dao.ListDao;
 import com.todolist.dao.TaskDao;
+import com.todolist.entities.Lists;
 import com.todolist.entities.Task;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,14 +22,17 @@ public class DeleteTaskServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] taskAndList = req.getParameter("listAndTask").
                 split(",");
-        String listName = taskAndList[0];
-        String task_body = taskAndList[1];
-        Task task = new Task(listName, task_body);
+        int idList = Integer.parseInt(taskAndList[0]);
+        String taskBody = taskAndList[1];
+        Lists list = new ListDao().getListById(idList);
+        Task taskToDelete = new Task(list, taskBody);
+        Task task = new TaskDao().getTaskByBody(list, taskToDelete);
         new TaskDao().deleteTask(task);
         req.setAttribute("task", task);
-        req.setAttribute("listName",listName);
-        req.setAttribute("allTasks", new TaskDao().getAllTasksOfList(listName));
-        req.getRequestDispatcher("/view-all-tasks-delete.jsp").forward(req,resp);
+        req.setAttribute("list", list);
+        req.setAttribute("allTasks", new TaskDao().getAllTasksOfList(list));
+        req.setAttribute("delete", true);
+        req.getRequestDispatcher("/view-all-tasks.jsp").forward(req, resp);
     }
 
     @Override

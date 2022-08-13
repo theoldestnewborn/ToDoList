@@ -1,12 +1,12 @@
 package com.todolist.dto;
 
 public class UserRegisterDto {
-    private String userName;
+    private String login;
     private String email;
     private String password;
 
-    public UserRegisterDto(String userName, String email, String password) {
-        this.userName = userName;
+    public UserRegisterDto(String login, String email, String password) {
+        this.login = login;
         this.email = email;
         this.password = password;
     }
@@ -14,12 +14,12 @@ public class UserRegisterDto {
     public UserRegisterDto() {
     }
 
-    public String getUserName() {
-        return userName;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getEmail() {

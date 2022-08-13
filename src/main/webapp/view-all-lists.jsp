@@ -11,15 +11,35 @@
 </head>
 
 <body class="body container-fluid">
-<header>
+<header class="pt-5">
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
+                <span class="fs-1">ToDoList Project</span>
+            </div>
 
+            <ul class="nav nav-pills justify-content-between">
+                <div class="align-items-end d-flex mx-2">
+                    <form action="/about.jsp">
+                        <button type="submit" class="btn btn-light btn-outline-dark">About</button>
+                    </form>
+                </div>
+                <div class="align-items-end d-flex mx-2 ">
+                    <form action="/logout" method="get">
+                        <button type="submit" class="btn btn-light btn-outline-dark">LogOut</button>
+                    </form>
+                </div>
+                </li>
+            </ul>
+        </header>
+    </div>
 </header>
-<main class="pt-5">
+<main class="container">
     <div class="container pt-5">
         <div class="row p-lg-4 p-1 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
             <div class="col-lg-12 p-2 p-lg-5 pt-lg-3 pb-lg-1">
                 <h1 class="display-4 fw-bold lh-1 text-light">ToDoList</h1>
-                <p class="lead text-light">Current lists</p>
+                <p class="lead text-light">Hello, ${user.login}. Your lists are:</p>
                 <div class="list-group">
                     <c:if test="${allLists.isEmpty()==true}">
                         <li class="list-group-item list-group-item-dark
@@ -40,8 +60,8 @@
                                                 align-items-center">
                                         <div class="btn-group">
                                             <button type="submit"
-                                                    value="${list.listName}"
-                                                    name="listName"
+                                                    value="${list.idList}"
+                                                    name="idList"
                                                     form="edit"
                                                     class="btn btn-outline-dark justify-content-between
                                                            d-flex col-lg-11 col-9">
@@ -54,8 +74,8 @@
                                             </button>
 
                                             <div>
-                                                <button type="submit" name="listName" form="delete"
-                                                        value="${list.listName}"
+                                                <button type="submit" name="idList" form="delete"
+                                                        value="${list.idList}"
                                                         class="btn btn-outline-dark">Delete
                                                 </button>
                                             </div>
@@ -75,17 +95,41 @@
                 <div class="input-group">
                     <input type="text" form="addList" class="form-control" name="listName"
                            placeholder="List Name">
-                    <form action="/create" method="post" id="addList">
+                    <form action="/viewAll" method="post" id="addList">
                         <button class="btn btn-outline-secondary" type="submit">Add list</button>
                     </form>
-                    <form action="start.jsp">
+                    <form action="/start">
                         <button class="btn btn-outline-secondary" type="submit">Back</button>
                     </form>
                 </div>
+
+                <c:if test="${create == true}">
+                    <c:if test="${ifExistsOrWrongName==false}">
+                        <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                            <div class="alert alert-success" role="alert">
+                                List '${list.listName}' was successfully created.
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${ifExistsOrWrongName==true}">
+                        <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                            <div class="alert alert-warning" role="alert">
+                                List '${list.listName}' already exists or has wrong name
+                            </div>
+                        </div>
+                    </c:if>
+                </c:if>
+
+                <c:if test="${delete == true}">
+                    <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
+                        <div class="alert alert-warning" role="alert">
+                            List '${deletedList.listName}' was successfully deleted.
+                        </div>
+                    </div>
+                </c:if>
+
             </div>
-
         </div>
-
     </div>
 </main>
 

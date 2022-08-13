@@ -5,15 +5,15 @@ import java.util.Objects;
 public class User {
 
 
-    private String userName, email, password;
-    private long id;
+    private String login, email, password;
+    private int id;
 
-    public String getUserName() {
-        return userName;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getEmail() {
@@ -32,11 +32,11 @@ public class User {
         this.password = password;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -45,11 +45,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(userName, user.userName) && Objects.equals(email, user.email) && Objects.equals(password, user.password);
+        return id == user.id && Objects.equals(login, user.login) && Objects.equals(email, user.email) && Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, email, password, id);
+        return Objects.hash(login, email, password, id);
     }
 }

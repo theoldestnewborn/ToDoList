@@ -2,6 +2,7 @@ package com.todolist.controller.task;
 
 import com.todolist.dao.ListDao;
 import com.todolist.dao.TaskDao;
+import com.todolist.entities.Lists;
 import com.todolist.entities.Task;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,25 +20,19 @@ public class SetTaskCompleteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] taskAndList = req.getParameter("listAndTask").
+        String[] listAndTasks = req.getParameter("listAndTask").
                 split(",");
-        String listName = taskAndList[0];
-        String task_body = taskAndList[1];
-        boolean isComplete = Boolean.parseBoolean(taskAndList[2]);
-        TaskDao taskDao = new TaskDao();
-        Task task = new Task(listName, task_body);
-        taskDao.setTaskComplete(task, isComplete);
-        req.setAttribute("listName",listName);
-        req.setAttribute("task", taskDao.getOneTask(listName, task_body));
-        req.getRequestDispatcher("/editTask.jsp").forward(req,resp);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getParameter("isComplete");
-        req.getParameter("task_body");
-        req.setAttribute("allTasks", new TaskDao().getAllTasksOfList(req.getParameter("listName")));
-        req.getRequestDispatcher("/view-all-tasks.jsp").forward(req,resp);
+        int idList = Integer.parseInt(listAndTasks[0]);
+        String taskBody = listAndTasks[1];
+        boolean isComplete = Boolean.parseBoolean(listAndTasks[2]);
+        Lists list = new ListDao().getListById(idList);
+        Task task = new TaskDao().getTaskByBody(list, new Task(list, taskBody));
+        new TaskDao().setTaskComplete(task, isComplete);
+        Task taskUpdated = new TaskDao().getTaskByBody(list, task);
+        req.setAttribute("task", taskUpdated);
+        req.setAttribute("list", list);
+        req.setAttribute("allTasks", new TaskDao().getAllTasksOfList(list));
+        req.getRequestDispatcher("/edit-task.jsp").forward(req,resp);
     }
 
     @Override

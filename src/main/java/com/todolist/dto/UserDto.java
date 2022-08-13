@@ -1,20 +1,20 @@
 package com.todolist.dto;
 
 public class UserDto {
-    public String userName;
+    public String login;
 
-    public UserDto(String userName) {
-        this.userName = userName;
+    public UserDto(String login) {
+        this.login = login;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getLogin() {
+        return login;
     }
 
     public UserDto() {
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setLogin(String login) {
+        this.login = login;
     }
 }

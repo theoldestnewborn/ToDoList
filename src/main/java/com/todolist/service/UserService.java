@@ -11,6 +11,6 @@ public class UserService {
     }
 
     public boolean isRegistered (User user) {
-        return userDao.findByEmailAndPassword(user).isPresent();
+        return userDao.findByLoginAndPassword(user).isPresent();
     }
 }

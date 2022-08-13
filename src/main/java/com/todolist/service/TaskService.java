@@ -1,19 +1,17 @@
 package com.todolist.service;
 
 import com.todolist.dao.TaskDao;
+import com.todolist.entities.Lists;
 import com.todolist.entities.Task;
 
-import java.util.List;
-
 public class TaskService {
-    public boolean ifExistsOrWrongName(Task task) {
-        boolean ifExistsOrWrongName = true;
-        String task_body = task.getTask_body();
+    public boolean hasProperName (Lists list, Task task) {
+        boolean hasProperName = false;
+        String taskBody = task.getTaskBody();
         TaskDao taskDao = new TaskDao();
-        if (!taskDao.ifTaskExists(task) && !task_body.trim().isEmpty()) {
-            taskDao.addTask(task);
-            ifExistsOrWrongName = false;
+        if (!taskDao.taskExists(list, task) && !taskBody.trim().isEmpty()) {
+            hasProperName = true;
         }
-        return ifExistsOrWrongName;
+        return hasProperName;
 }
 }
