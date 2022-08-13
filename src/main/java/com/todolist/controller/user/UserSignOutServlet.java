@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "logout", value = "/logout")
-public class UserLogOutServlet extends HttpServlet {
+@WebServlet(name = "signOut", value = "/signOut")
+public class UserSignOutServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {

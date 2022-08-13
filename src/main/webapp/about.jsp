@@ -1,5 +1,4 @@
-<%--@elvariable id="message" type="java.lang.String"--%>
-<%--@elvariable id="color" type="java.lang.String"--%>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -30,31 +29,31 @@
 <body class="body container-fluid">
 <header class="pt-5">
     <div class="container">
-        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-            <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
-                <span class="fs-1">ToDoList Project</span>
+        <div class="d-flex flex-wrap justify-content-center mb-5 pt-5 pb-2 px-4 border-bottom">
+            <div class="d-flex align-items-center p-0 mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
+                <div class="display-4 lh-0 text-light p-2 rounded-4" style="background: rgba(173,181,189,0.22)">ToDoList Project</div>
             </div>
 
             <ul class="nav nav-pills justify-content-between">
-                <div class="align-items-end d-flex mx-2">
+                <div class="align-items-end d-flex m-2">
                     <form action="/about.jsp">
-                        <button type="submit" class="btn btn-light btn-outline-dark">About</button>
+                        <button type="submit" class="btn btn-light">About</button>
                     </form>
                 </div>
-                <div class="align-items-end d-flex mx-2 ">
+                <div class="align-items-end d-flex m-2 ">
                     <form action="/start" method="get">
-                        <button type="submit" class="btn btn-light btn-outline-dark">Login</button>
+                        <button type="submit" class="btn btn-light">Sign in</button>
                     </form>
                 </div>
                 </li>
             </ul>
-        </header>
+        </div>
     </div>
 </header>
 <main class="container pt-5">
     <div class="d-flex justify-content-center p-3 ">
         <div style="background: rgba(10,6,6,0.33); color: rgba(255,255,255,0.63)" class="p-5 rounded-2 border" >
-            <p> <a href="/start">ToDoList</a> was created by Aleksei Chirkun in August, 2022.</p>
+            <p> <a href="/start">ToDoList</a> by Aleksei Chirkun. August, 2022.</p>
             - Java SE </br>
             - Java EE </br>
             - JDBC, PostgreSQL </br>

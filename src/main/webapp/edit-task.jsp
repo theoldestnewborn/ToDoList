@@ -6,36 +6,34 @@
 <head>
     <title>ToDoList</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="custom.css">
 </head>
 
 <body class="body container-fluid">
-<header>
-    <header class="pt-5">
-        <div class="container">
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-                <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
-                    <span class="fs-1">ToDoList Project</span>
-                </div>
+<header class="pt-5">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-center mb-5 pt-5 pb-2 px-4 border-bottom">
+            <div class="d-flex align-items-center p-0 mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
+                <div class="display-4 lh-0 text-light p-2 rounded-4" style="background: rgba(173,181,189,0.22)">ToDoList Project</div>
+            </div>
 
-                <ul class="nav nav-pills justify-content-between">
-                    <div class="align-items-end d-flex mx-2">
-                        <form action="/about.jsp">
-                            <button type="submit" class="btn btn-light btn-outline-dark">About</button>
-                        </form>
-                    </div>
-                    <div class="align-items-end d-flex mx-2 ">
-                        <form action="/logout" method="get">
-                            <button type="submit" class="btn btn-light btn-outline-dark">LogOut</button>
-                        </form>
-                    </div>
-                    </li>
-                </ul>
-            </header>
+            <ul class="nav nav-pills justify-content-between">
+                <div class="align-items-end d-flex m-2">
+                    <form action="/about.jsp">
+                        <button type="submit" class="btn btn-light">About</button>
+                    </form>
+                </div>
+                <div class="align-items-end d-flex m-2 ">
+                    <form action="/signOut" method="get">
+                        <button type="submit" class="btn btn-light">Sign Out</button>
+                    </form>
+                </div>
+                </li>
+            </ul>
         </div>
-    </header>
+    </div>
 </header>
 <main class="container">
     <div class="container pt-5">
@@ -206,6 +204,8 @@
 <footer>
 
 </footer>
+
+</script>
 <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
