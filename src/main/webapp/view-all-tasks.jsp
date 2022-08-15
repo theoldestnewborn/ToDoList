@@ -5,6 +5,8 @@
 <html>
 <head>
     <title>ToDoList</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.css"
+          rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="custom.css">
@@ -20,13 +22,13 @@
 
             <ul class="nav nav-pills justify-content-between">
                 <div class="align-items-end d-flex m-2">
-                    <form action="/about.jsp">
+                    <form action="<c:url value="/about.jsp"/>">
                         <button type="submit" class="btn btn-light">About</button>
                     </form>
                 </div>
                 <div class="align-items-end d-flex m-2 ">
-                    <form action="/start.jsp" method="get">
-                        <button type="submit" class="btn btn-light">Sign in</button>
+                    <form action="<c:url value="/start.jsp"/>" method="get">
+                        <button type="submit" class="btn btn-light">Sign out</button>
                     </form>
                 </div>
                 </li>
@@ -55,7 +57,7 @@
                     <c:if test="${allTasks.isEmpty()==false}">
                         <c:forEach var="task" items="${allTasks}">
                             <div>
-                                <form action="/editTask" method="get" id="edit">
+                                <form action="<c:url value="/editTask"/>" method="get" id="edit">
                                     <div class="d-grid gap-2
                                                 mb-1 list-group list-group-item-dark
                                                 align-items-center">
@@ -94,7 +96,7 @@
                                         </div>
                                     </div>
                                 </form>
-                                <form action="/deleteTask" method="post" id="delete"></form>
+                                <form action="<c:url value="/deleteTask"/>" method="post" id="delete"></form>
                             </div>
 
                         </c:forEach>
@@ -107,14 +109,13 @@
                 <div class="input-group mb-3">
                     <input type="text" form="addTask" class="form-control" name="taskBody"
                            placeholder="Task Body">
-                    <form action="/viewAllTasks" method="post" id="addTask">
-                        <button type="submit" class="btn btn-outline-secondary"
+                        <button type="submit" class="btn btn-outline-secondary" form="addTask"
                                 value="${list.idList}" name="idList">Add task
                         </button>
-                    </form>
-                    <form action="/viewAll" method="get">
-                        <button class="btn btn-outline-secondary" value="${list.idList}" type="submit">Back</button>
-                    </form>
+                        <button class="btn btn-outline-secondary" value="${list.idList}"
+                                form="back" type="submit">Back</button>
+                    <form action="<c:url value="/viewAllTasks"/>" method="post" id="addTask"></form>
+                    <form action="<c:url value="/viewAll"/>" method="get" id="back"></form>
                 </div>
 
                 <c:if test="${create==true}">

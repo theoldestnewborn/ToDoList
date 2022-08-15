@@ -1,6 +1,8 @@
 package com.todolist.dao;
 
 import com.todolist.entities.User;
+import com.todolist.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,8 +22,9 @@ public class UserDao {
     public void registerUser(User user) {
         try (Connection connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
+            String hashedPassword = new UserService().passwordHasher(user);
             stmt.execute("insert into users (login, email, password) " +
-                    "values ('" + user.getLogin() + "' , '" + user.getEmail() + "' , '" + user.getPassword() + "');");
+                    "values ('" + user.getLogin() + "' , '" + user.getEmail() + "' , '" + hashedPassword + "');");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +68,7 @@ public class UserDao {
         return user;
     }
 
-    public boolean findByLogin(User userForm) {
+    public boolean findByLoginOrEmail(User userForm) {
         boolean userExists = false;
         try (Connection connection = DriverManager.getConnection
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
@@ -75,6 +78,12 @@ public class UserDao {
             if (rs.next()) {
                 userExists = true;
             }
+            Statement stmt1 = connection.createStatement();
+            ResultSet rs1 = stmt.executeQuery("select * from users " +
+                    "where email = '" + userForm.getEmail() + "'");
+            if (rs1.next()) {
+                userExists = true;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -82,17 +91,17 @@ public class UserDao {
     }
 
     public Optional<User> findByLoginAndPassword(User userForm) {
-        List<User> filteredUsers = null;
+        List<User> filteredUsers = new ArrayList<>();
+        String hashedPasswordToCheck = new UserService().passwordHasher(userForm);
         try (Connection connection = DriverManager.getConnection
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from users " +
                     "where login = '" + userForm.getLogin() + "' " +
-                    "and password = '" + userForm.getPassword() + "'");
+                    "and password = '" + hashedPasswordToCheck + "'");
             while (rs.next()) {
                 User userDb = new User();
                 userDb.setLogin(rs.getString("login"));
-                userDb.setPassword(rs.getString("password"));
                 filteredUsers = new ArrayList<>();
                 filteredUsers.add(userDb);
             }

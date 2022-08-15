@@ -29,10 +29,16 @@ public class UserLoginServlet extends HttpServlet {
         boolean isRegistered = userService.isRegistered(userToLogin);
         HttpSession session = request.getSession();
         session.setAttribute("isAuth", isRegistered);
-        User user = new UserDao().getUserByLogin(userToLogin);
-        session.setAttribute("user", user);
-        request.setAttribute("allLists", new ListDao().getAllLists(user));
-        request.getRequestDispatcher("/viewAll").forward(request,response);
+        if (isRegistered) {
+            User user = new UserDao().getUserByLogin(userToLogin);
+            session.setAttribute("user", user);
+            request.setAttribute("allLists", new ListDao().getAllLists(user));
+            request.getRequestDispatcher("/viewAll").forward(request, response);
+        } else {
+            request.setAttribute("message", "No user with such login or wrong password. Please, try again");
+            request.setAttribute("register", false);
+            request.getRequestDispatcher("/start.jsp").forward(request, response);
+        }
     }
 
     @Override

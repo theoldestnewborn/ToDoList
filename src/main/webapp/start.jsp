@@ -26,12 +26,12 @@
 
             <ul class="nav nav-pills justify-content-between">
                 <div class="align-items-end d-flex m-2">
-                    <form action="/about.jsp">
+                    <form action="/to-do-list/about.jsp">
                         <button type="submit" class="btn btn-light">About</button>
                     </form>
                 </div>
                 <div class="align-items-end d-flex m-2 ">
-                    <form action="/start.jsp" method="get">
+                    <form action="/to-do-list/start.jsp" method="get">
                         <button type="submit" class="btn btn-light">Sign in</button>
                     </form>
                 </div>
@@ -67,14 +67,15 @@
                                    style="color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.07)"
                                    id="login" name="login"
                                    class="form-control"/>
-                            <label class="form-label" style="color: rgba(255,255,255,0.42)" for="login">Login</label>
+                            <label class="form-label" style="color: rgba(255,255,255,0.42)"
+                                   for="login">Login</label>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-outline mb-4">
                             <input type="password"
                                    style="color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.07)"
-                                   style="color: rgba(255,255,255,0.8)" id="loginPassword"
+                                   id="loginPassword"
                                    name="password" class="form-control"/>
                             <label class="form-label" style="color: rgba(255,255,255,0.42)"
                                    for="loginPassword">Password</label>
@@ -96,7 +97,9 @@
                                        style="color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.07)"
                                        id="registerLogin" name="login"
                                        class="form-control"/>
-                                <label class="form-label" style="color: rgba(255,255,255,0.42)" for="registerLogin">Login</label>
+                                <label class="form-label"
+                                       style="color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.07)"
+                                       for="registerLogin">Login</label>
                             </div>
 
                             <!-- Email input -->

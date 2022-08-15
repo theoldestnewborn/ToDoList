@@ -5,7 +5,8 @@
 <html>
 <head>
     <title>ToDoList</title>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.css"
+          rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="custom.css">
@@ -16,18 +17,20 @@
     <div class="container">
         <div class="d-flex flex-wrap justify-content-center mb-5 pt-5 pb-2 px-4 border-bottom">
             <div class="d-flex align-items-center p-0 mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
-                <div class="display-4 lh-0 text-light p-2 rounded-3" style="background: rgba(173,181,189,0.22)">ToDoList Project</div>
+                <div class="display-4 lh-0 text-light p-2 rounded-3" style="background: rgba(173,181,189,0.22)">ToDoList
+                    Project
+                </div>
             </div>
 
             <ul class="nav nav-pills justify-content-between">
                 <div class="align-items-end d-flex m-2">
-                    <form action="/about.jsp">
+                    <form action="<c:url value = "/about.jsp"/>">
                         <button type="submit" class="btn btn-light">About</button>
                     </form>
                 </div>
                 <div class="align-items-end d-flex m-2 ">
-                    <form action="/start.jsp" method="get">
-                        <button type="submit" class="btn btn-light">Sign in</button>
+                    <form action="<c:url value = "/signOut"/>" method="get">
+                        <button type="submit" class="btn btn-light">Sign out</button>
                     </form>
                 </div>
                 </li>
@@ -54,54 +57,51 @@
                     </c:if>
                     <c:if test="${allLists.isEmpty()==false}">
                         <c:forEach var="list" items="${allLists}">
-                            <div>
-                                <form action="/viewAllTasks" method="get" id="edit">
-                                    <div class="d-grid gap-2
+
+                            <form action="<c:url value = "/viewAllTasks"/>" id="edit" method="get">
+                                <div class="d-grid gap-2
                                                 mb-1 list-group list-group-item-dark
                                                 align-items-center">
-                                        <div class="btn-group">
-                                            <button type="submit"
-                                                    value="${list.idList}"
-                                                    name="idList"
-                                                    form="edit"
-                                                    class="btn btn-outline-dark justify-content-between
+                                    <div class="btn-group">
+                                        <button type="submit"
+                                                value="${list.idList}"
+                                                name="idList"
+                                                form="edit"
+                                                class="btn btn-outline-dark justify-content-between
                                                            d-flex col-lg-11 col-9">
-                                                <c:out value="${list.listName}"/>
-                                                <div>
-                                                    <div class="badge bg-info rounded-pill ">
-                                                        <c:out value="${list.tasksQuantity}"/>
-                                                    </div>
-                                                </div>
-                                            </button>
-
+                                            <c:out value="${list.listName}"/>
                                             <div>
-                                                <button type="submit" name="idList" form="delete"
-                                                        value="${list.idList}"
-                                                        class="btn btn-outline-dark">Delete
-                                                </button>
+                                                <div class="badge bg-info rounded-pill ">
+                                                    <c:out value="${list.tasksQuantity}"/>
+                                                </div>
                                             </div>
+                                        </button>
+
+                                        <div>
+                                            <button type="submit" name="idList" form="delete"
+                                                    value="${list.idList}"
+                                                    class="btn btn-outline-dark">Delete
+                                            </button>
                                         </div>
                                     </div>
-                                </form>
-                                <form action="/deleteList" method="post" id="delete"></form>
-                            </div>
+                                </div>
+                            </form>
+                            <form action="<c:url value = "/deleteList"/>" method="post" id="delete"></form>
+
 
                         </c:forEach>
                     </c:if>
                 </div>
             </div>
 
-
-            <div class="col-lg-12 p-1 p-lg-5 pt-lg-3 justify-content-between">
+            <div class="col-lg-12 p-1 p-lg-5 pt-lg-3">
                 <div class="input-group">
                     <input type="text" form="addList" class="form-control" name="listName"
                            placeholder="List Name">
-                    <form action="/viewAll" method="post" id="addList">
-                        <button class="btn btn-outline-secondary" type="submit">Add list</button>
-                    </form>
-                    <form action="/start">
-                        <button class="btn btn-outline-secondary" type="submit">Back</button>
-                    </form>
+                    <button class="btn btn-outline-secondary" type="submit" form="addList">Add list</button>
+                    <button class="btn btn-outline-secondary" form="start" type="submit">Back</button>
+                    <form action="<c:url value = "/viewAll"/>" id="addList" method="post"></form>
+                    <form action="<c:url value = "/start"/>" id="start"></form>
                 </div>
 
                 <c:if test="${create == true}">

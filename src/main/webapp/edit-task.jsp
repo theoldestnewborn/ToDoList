@@ -6,7 +6,8 @@
 <head>
     <title>ToDoList</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.css"
+          rel="stylesheet"/>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="custom.css">
 </head>
@@ -16,17 +17,19 @@
     <div class="container">
         <div class="d-flex flex-wrap justify-content-center mb-5 pt-5 pb-2 px-4 border-bottom">
             <div class="d-flex align-items-center p-0 mb-3 mb-md-0 me-md-auto text-light text-decoration-none ">
-                <div class="display-4 lh-0 text-light p-2 rounded-4" style="background: rgba(173,181,189,0.22)">ToDoList Project</div>
+                <div class="display-4 lh-0 text-light p-2 rounded-4" style="background: rgba(173,181,189,0.22)">ToDoList
+                    Project
+                </div>
             </div>
 
             <ul class="nav nav-pills justify-content-between">
                 <div class="align-items-end d-flex m-2">
-                    <form action="/about.jsp">
+                    <form action="<c:url value="/about.jsp"/>">
                         <button type="submit" class="btn btn-light">About</button>
                     </form>
                 </div>
                 <div class="align-items-end d-flex m-2 ">
-                    <form action="/signOut" method="get">
+                    <form action="<c:url value="/signOut"/>" method="get">
                         <button type="submit" class="btn btn-light">Sign Out</button>
                     </form>
                 </div>
@@ -80,7 +83,7 @@
                 </div>
 
                 <div class="collapse" id="collapse">
-                    <form action="/editTask" method="post" id="editTask">
+                    <form action="<c:url value="/editTask"/>" method="post" id="editTask">
                         <div class="mb-2 mt-2">
                         <textarea class="form-control" form="editTask" name="newTaskBody"
                                   id="FormTextarea"
@@ -111,14 +114,13 @@
                                  aria-expanded="false"
                                  aria-controls="collapse">Update Task
                             </div>
-                            <form action="/viewAllTasks" method="post" id="edit_body"></form>
+                            <form action="<c:url value="/viewAllTasks"/>" method="post" id="edit_body"></form>
 
                             <button type="submit" form="delete" name="listAndTask"
                                     value="${list.idList},${task.taskBody}"
                                     class="btn btn-outline-dark col-lg-1 col-3">Delete
                             </button>
-                            <form action="/deleteTask" method="post" id="delete"></form>
-
+                            <form action="<c:url value="/deleteTask"/>" method="post" id="delete"></form>
 
 
                             <c:if test="${task.active==false}">
@@ -126,8 +128,8 @@
                                         value="${list.idList},${task.taskBody},true"
                                         class="btn btn-outline-dark col-lg-1 col-3">Set Active 🔥
                                 </button>
-                                <form action="/setTaskActive" method="post" id="set_active"></form>
-                                <form action="/setTaskComplete" method="post" id="set_complete"></form>
+                                <form action="<c:url value="/setTaskActive"/>" method="post" id="set_active"></form>
+                                <form action="<c:url value="/setTaskComplete"/>" method="post" id="set_complete"></form>
 
                             </c:if>
                             <c:if test="${task.active==true}">
@@ -135,8 +137,8 @@
                                         value="${list.idList},${task.taskBody},false"
                                         class="btn btn-outline-dark col-lg-1 col-3">Set Inactive 🧯
                                 </button>
-                                <form action="/setTaskActive" method="post" id="set_active"></form>
-                                <form action="/setTaskComplete" method="post" id="set_complete"></form>
+                                <form action="<c:url value="/setTaskActive"/>" method="post" id="set_active"></form>
+                                <form action="<c:url value="/setTaskComplete"/>" method="post" id="set_complete"></form>
 
                             </c:if>
 
@@ -149,7 +151,7 @@
                                         ✓
                                     </div>
                                 </button>
-                                <form action="/setTaskComplete" method="post" id="set_complete"></form>
+                                <form action="<c:url value="/setTaskComplete"/>" method="post" id="set_complete"></form>
 
                             </c:if>
                             <c:if test="${task.complete==true}">
@@ -160,10 +162,10 @@
                                         ❌
                                     </div>
                                 </button>
-                                <form action="/setTaskComplete" method="post" id="set_complete"></form>
+                                <form action="<c:url value="/setTaskComplete"/>" method="post" id="set_complete"></form>
 
                             </c:if>
-                            <form action="/viewAll" method="post">
+                            <form action="<c:url value="viewAll"/>" method="post">
 
                             </form>
 
@@ -177,7 +179,7 @@
                                 value="${list.idList}"
                                 class="btn btn btn-outline-dark col-lg-12 col-12">Back
                         </button>
-                        <form action="/viewAllTasks" method="get" id="back"></form>
+                        <form action="<c:url value="/viewAllTasks"/>" method="get" id="back"></form>
                     </div>
                 </div>
                 <c:if test="${update==true}">
