@@ -38,14 +38,6 @@ public class ListDao {
         }
     }
 
-    public void deleteAll() {
-        try (Connection connection = DriverManager.getConnection(DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("truncate table lists, tasks");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public Lists getListById(int idList) {
         Lists list = null;

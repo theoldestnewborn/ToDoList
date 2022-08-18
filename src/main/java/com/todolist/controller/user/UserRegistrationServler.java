@@ -25,23 +25,29 @@ public class UserRegistrationServler extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = mapper.toUser((UserRegisterDto) request.getAttribute("user"));
-        if (userDao.findByLoginOrEmail(user)) {
-            request.setAttribute("message", "Such user already exists");
-            request.setAttribute("register", false);
-            request.getRequestDispatcher("/start.jsp").forward(request, response);
-        } else if (user.getPassword()!= request.getParameter("repeatPassword")) {
-            request.setAttribute("message", "Entered passwords don't match each other");
-            request.setAttribute("register", false);
-            request.getRequestDispatcher("/start.jsp").forward(request, response);
-        }
-        else {
+        if (userDao.findByLoginOrEmail(user)||request.getParameter("login").trim().isEmpty()) {
+            ServletContext context = request.getServletContext();
+            context.setAttribute("message", "Such user already exists or wrong login");
+            context.setAttribute("register", false);
+            String path = request.getContextPath() + "/start.jsp";
+            response.sendRedirect(path);
+
+        } else if (!request.getParameter("password").equals(request.getParameter("repeatPassword"))) {
+            ServletContext context = request.getServletContext();
+            context.setAttribute("message", "Entered passwords don't match each other");
+            context.setAttribute("register", false);
+            String path = request.getContextPath() + "/start.jsp";
+            response.sendRedirect(path);
+
+        } else {
             userDao.registerUser(user);
-            request.setAttribute("message", "User " + user.getLogin() +  " is registered!");
-            request.setAttribute("register", true);
-            request.getRequestDispatcher("/start.jsp").forward(request, response);
+            ServletContext context = request.getServletContext();
+            context.setAttribute("message", "User " + user.getLogin() +  " is registered!");
+            context.setAttribute("register", true);
+            String path = request.getContextPath() + "/start.jsp";
+            response.sendRedirect(path);
         }
     }
-
 
     @Override
     public void destroy() {

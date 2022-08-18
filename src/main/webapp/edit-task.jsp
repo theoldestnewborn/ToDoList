@@ -60,11 +60,9 @@
                                 value="${list.idList},${task.taskBody}"
                                 name="listAndTask"
                                 class="btn btn-outline-dark  col-lg-12 col-12">
-                            <c:forEach items="${allTasks}" var="task">
                                 <c:if test="${task.active==true}">
                                     🔥
                                 </c:if>
-                            </c:forEach>
                             <c:out value="${task.taskBody}"/>
 
                             <c:if test="${task.complete==true}">
@@ -85,7 +83,7 @@
                 <div class="collapse" id="collapse">
                     <form action="<c:url value="/editTask"/>" method="post" id="editTask">
                         <div class="mb-2 mt-2">
-                        <textarea class="form-control" form="editTask" name="newTaskBody"
+                        <textarea class="form-control" form="editTask" name="updatedTaskBody"
                                   id="FormTextarea"
                                   rows="2" placeholder="Type here"></textarea>
                         </div>

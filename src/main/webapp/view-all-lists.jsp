@@ -105,14 +105,14 @@
                 </div>
 
                 <c:if test="${create == true}">
-                    <c:if test="${ifExistsOrWrongName==false}">
+                    <c:if test="${isListNameProper==false}">
                         <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
                             <div class="alert alert-success" role="alert">
                                 List '${list.listName}' was successfully created.
                             </div>
                         </div>
                     </c:if>
-                    <c:if test="${ifExistsOrWrongName==true}">
+                    <c:if test="${isListNameProper==true}">
                         <div class="card bg-dark text-white mt-2" style="border-radius: 1rem;">
                             <div class="alert alert-warning" role="alert">
                                 List '${list.listName}' already exists or has wrong name

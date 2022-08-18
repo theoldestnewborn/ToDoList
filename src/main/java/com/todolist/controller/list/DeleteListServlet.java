@@ -1,34 +1,41 @@
 package com.todolist.controller.list;
 
 import com.todolist.dao.ListDao;
+import com.todolist.dto.assembler.ListAssembler;
 import com.todolist.entities.Lists;
 import com.todolist.entities.User;
+import com.todolist.service.ListService;
+import com.todolist.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
 @WebServlet(name = "deleteList", value = "/deleteList")
 public class DeleteListServlet extends HttpServlet {
+    public UserService userService;
+    public ListDao listDao;
+    public ListAssembler listAssembler;
+
     @Override
     public void init() {
+        userService = new UserService();
+        listDao = new ListDao();
+        listAssembler = new ListAssembler();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
-        int idList = Integer.parseInt(req.getParameter("idList"));
-        Lists list = new ListDao().getListById(idList);
-        req.setAttribute("deletedList",list);
-        new ListDao().deleteList(list, user);
-        req.setAttribute("allLists", new ListDao().getAllLists(user));
+        User user = userService.getUserFromSession(req);
+        Lists list = listAssembler.assembleListFromRequest(req);
+        listDao.deleteList(list, user);
+        req.setAttribute("deletedList", list);
+        req.setAttribute("allLists", listDao.getAllLists(user));
         req.setAttribute("delete", true);
-        req.getRequestDispatcher("/view-all-lists.jsp").forward(req,resp);
+        req.getRequestDispatcher("/view-all-lists.jsp").forward(req, resp);
     }
 
     @Override

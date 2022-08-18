@@ -23,7 +23,8 @@ public class TaskDao {
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from tasks " +
-                    "where fk_id_list = ('" + list.getIdList() + "');");
+                    "where fk_id_list = ('" + list.getIdList() + "') " +
+                    "order by id_task;");
             while (rs.next()) {
                 Task task = new Task();
                 task.setTaskBody(rs.getString("task_body"));
@@ -37,9 +38,8 @@ public class TaskDao {
         return allTasks;
     }
 
-    public boolean taskExists(Lists list, Task task) {
+    public boolean taskExists(Lists list, String taskBody) {
         int idList = list.getIdList();
-        String taskBody = task.getTaskBody();
         boolean taskExists = false;
         try (Connection connection = DriverManager.getConnection
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
@@ -57,18 +57,16 @@ public class TaskDao {
         return taskExists;
     }
 
-    public Task getTaskByBody(Lists list, Task taskByBody) {
-        Task task = null;
+    public Task getTaskByBody(Lists list, String taskByBody) {
+        Task task = new Task();
         int idList = list.getIdList();
-        String taskBody = taskByBody.getTaskBody();
         try (Connection connection = DriverManager.getConnection
                 (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from tasks " +
                     "where fk_id_list = '" + idList + "' " +
-                    "and task_body = '" + taskBody + "';");
+                    "and task_body = '" + taskByBody + "';");
             while (rs.next()) {
-                task = new Task();
                 task.setId(rs.getInt("id_task"));
                 task.setIdList(rs.getInt("fk_id_list"));
                 task.setTaskBody(rs.getString("task_body"));
@@ -79,22 +77,6 @@ public class TaskDao {
             throw new RuntimeException(e);
         }
         return task;
-    }
-
-    public boolean hasActiveTask() {
-        boolean hasActive = false;
-        try (Connection connection = DriverManager.getConnection
-                (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from tasks " +
-                    "where active = true");
-            if (rs.next()) {
-                hasActive = true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return hasActive;
     }
 
     public void setTaskActive(Task task, boolean isActive) {

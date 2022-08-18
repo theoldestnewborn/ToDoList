@@ -1,7 +1,7 @@
 package com.todolist.controller.task;
 
-import com.todolist.dao.ListDao;
 import com.todolist.dao.TaskDao;
+import com.todolist.dto.assembler.TaskAssembler;
 import com.todolist.entities.Lists;
 import com.todolist.entities.Task;
 import jakarta.servlet.ServletException;
@@ -14,24 +14,24 @@ import java.io.IOException;
 
 @WebServlet(name = "setTaskActive", value = "/setTaskActive")
 public class SetTaskActiveServlet extends HttpServlet {
+
+    public TaskDao taskDao;
+    public TaskAssembler taskAssembler;
+
+
     @Override
     public void init() {
+        taskDao = new TaskDao();
+        taskAssembler = new TaskAssembler();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] listAndTasks = req.getParameter("listAndTask").
-                split(",");
-        int idList = Integer.parseInt(listAndTasks[0]);
-        String taskBody = listAndTasks[1];
-        boolean isActive = Boolean.parseBoolean(listAndTasks[2]);
-        Lists list = new ListDao().getListById(idList);
-        Task task = new TaskDao().getTaskByBody(list, new Task(list, taskBody));
-        new TaskDao().setTaskActive(task, isActive);
-        Task taskUpdated = new TaskDao().getTaskByBody(list, task);
-        req.setAttribute("task", taskUpdated);
+        Task task =  taskAssembler.assembleTaskActiveFromRequest(req);
+        Lists list = taskAssembler.assembleListFromRequest(req);
+        req.setAttribute("task", task);
         req.setAttribute("list", list);
-        req.setAttribute("allTasks", new TaskDao().getAllTasksOfList(list));
+        req.setAttribute("allTasks", taskDao.getAllTasksOfList(list));
         req.getRequestDispatcher("/edit-task.jsp").forward(req, resp);
     }
 

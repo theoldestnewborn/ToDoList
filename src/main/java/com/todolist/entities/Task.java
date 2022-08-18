@@ -1,7 +1,5 @@
 package com.todolist.entities;
 
-import com.todolist.dao.TaskDao;
-
 public class Task {
     private String taskBody;
     private boolean isComplete;
@@ -11,22 +9,12 @@ public class Task {
     public Task() {
     }
 
-    public Task(Lists list, String task) {
-        this.idList = list.getIdList();
-        this.taskBody = task;
-        this.isComplete = false;
-        this.isActive = false;
-    }
-
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
 
     public int getIdList() {
         return idList;

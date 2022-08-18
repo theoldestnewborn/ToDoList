@@ -1,14 +1,18 @@
 package com.todolist.controller.user;
 
-import com.todolist.dao.ListDao;
 import com.todolist.dao.UserDao;
 import com.todolist.dto.UserLoginDto;
 import com.todolist.dto.mapper.UserMapper;
 import com.todolist.entities.User;
 import com.todolist.service.UserService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -32,12 +36,14 @@ public class UserLoginServlet extends HttpServlet {
         if (isRegistered) {
             User user = new UserDao().getUserByLogin(userToLogin);
             session.setAttribute("user", user);
-            request.setAttribute("allLists", new ListDao().getAllLists(user));
-            request.getRequestDispatcher("/viewAll").forward(request, response);
+            String path = request.getContextPath() + "/viewAll";
+            response.sendRedirect(path);
         } else {
-            request.setAttribute("message", "No user with such login or wrong password. Please, try again");
-            request.setAttribute("register", false);
-            request.getRequestDispatcher("/start.jsp").forward(request, response);
+            ServletContext context = request.getServletContext();
+            context.setAttribute("message", "No user with such login or wrong password. Please, try again");
+            context.setAttribute("register", false);
+            String path = request.getContextPath() + "/start.jsp";
+            response.sendRedirect(path);
         }
     }
 

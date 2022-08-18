@@ -8,7 +8,6 @@ public class DtoAssembler {
 
     private final UserLoginDtoAssembler userLoginDtoAssembler = new UserLoginDtoAssembler();
     private final UserRegisterDtoAssembler userRegisterDtoAssembler = new UserRegisterDtoAssembler();
-
     public void assemble(HttpServletRequest request){
         String path = request.getServletPath();
         if(path.equals(Paths.LOGIN_PATH)){

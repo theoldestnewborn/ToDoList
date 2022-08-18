@@ -2,7 +2,6 @@ package com.todolist.dao;
 
 import com.todolist.entities.User;
 import com.todolist.service.UserService;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,24 +29,6 @@ public class UserDao {
         }
     }
 
-    public List<User> getAll() {
-        List<User> allUsers = null;
-        try (Connection connection = DriverManager.getConnection
-                (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from users");
-            while (rs.next()) {
-                allUsers = new ArrayList<>();
-                User user = new User();
-                user.setLogin(rs.getString("login"));
-                user.setEmail(rs.getString("email"));
-                allUsers.add(user);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return allUsers;
-    }
 
     public User getUserByLogin(User userForm) {
         User user = null;
@@ -111,38 +92,4 @@ public class UserDao {
         return filteredUsers.size() > 0 ? Optional.of(filteredUsers.get(0)) : Optional.empty();
     }
 
-    public Integer getIdUser(User user) {
-        Integer idUser = null;
-        try (Connection connection = DriverManager.getConnection
-                (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from users " +
-                    "where login = '" + user.getLogin() + "');");
-            rs.next();
-            idUser = rs.getInt("id_user");
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return idUser;
-    }
-
-    public User getUserById(int idUser) {
-        List<User> filteredUsers;
-        User userDb = null;
-        try (Connection connection = DriverManager.getConnection
-                (DBConfig.URL, DBConfig.USER, DBConfig.PASSWORD)) {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from users " +
-                    "where id_user = " + idUser + ";");
-            rs.next();
-            userDb = new User();
-            userDb.setLogin(rs.getString("login"));
-            userDb.setEmail(rs.getString("email"));
-            userDb.setId(rs.getInt("id_user"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return userDb;
-    }
 }

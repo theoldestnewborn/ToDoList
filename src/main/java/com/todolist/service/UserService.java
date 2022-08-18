@@ -2,6 +2,8 @@ package com.todolist.service;
 
 import com.todolist.dao.UserDao;
 import com.todolist.entities.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class UserService {
@@ -21,4 +23,8 @@ public class UserService {
         return hashedPassword;
     }
 
+    public User getUserFromSession (HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        return (User) session.getAttribute("user");
+    }
 }

@@ -107,7 +107,7 @@
 
             <div class="col-lg-12 p-2 p-lg-5 pt-lg-3 pb-lg-1">
                 <div class="input-group mb-3">
-                    <input type="text" form="addTask" class="form-control" name="taskBody"
+                    <input type="text" form="addTask" class="form-control" name="newTaskBody"
                            placeholder="Task Body">
                         <button type="submit" class="btn btn-outline-secondary" form="addTask"
                                 value="${list.idList}" name="idList">Add task
