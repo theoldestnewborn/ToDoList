@@ -20,15 +20,11 @@ public class StartServlet extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
         getServletContext().getAttribute("message");
-        if (!(boolean)session.getAttribute("isAuth")) {
-            req.getRequestDispatcher("/start.jsp").forward(req, resp);
-        } else {
             User user = userService.getUserFromSession(req);
             req.setAttribute("allLists", listDao.getAllLists(user));
             req.getRequestDispatcher("/view-all-lists.jsp").forward(req, resp);
-        }
+
     }
     @Override
     public void destroy() {

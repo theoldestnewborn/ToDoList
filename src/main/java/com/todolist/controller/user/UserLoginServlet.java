@@ -40,7 +40,7 @@ public class UserLoginServlet extends HttpServlet {
             response.sendRedirect(path);
         } else {
             ServletContext context = request.getServletContext();
-            context.setAttribute("message", "No user with such login or wrong password. Please, try again");
+            context.setAttribute("message", "No user with such login or wrong password. </br> Please, try again");
             context.setAttribute("register", false);
             String path = request.getContextPath() + "/start.jsp";
             response.sendRedirect(path);

@@ -13,7 +13,6 @@ public class AuthFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-
         if (!isAuth((HttpServletRequest) request)) {
             request.getRequestDispatcher("/start.jsp").forward(request, response);
         }

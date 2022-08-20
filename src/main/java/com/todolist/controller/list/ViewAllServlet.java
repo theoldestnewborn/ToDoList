@@ -9,6 +9,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -18,6 +20,9 @@ public class ViewAllServlet extends HttpServlet {
     public UserService userService;
     private ListService listService;
     public ListDao listDao;
+
+    private static final Logger logger = LoggerFactory.getLogger(ViewAllServlet.class);
+
     @Override
     public void init() {
         userService = new UserService();
@@ -27,6 +32,7 @@ public class ViewAllServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         User user = userService.getUserFromSession(req);
         req.setAttribute("allLists", listDao.getAllLists(user));
         req.getRequestDispatcher("/view-all-lists.jsp").forward(req, resp);
